@@ -1,2 +1,4 @@
+Pillow
 polib
-django-babel
+babel
+pytz
