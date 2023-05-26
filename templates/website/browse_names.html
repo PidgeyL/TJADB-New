@@ -1,0 +1,58 @@
+{% extends 'website/layouts/master-page' %}
+{% load filters %}
+{% block css %}
+  <link href="/static/css/custom.css" rel="stylesheet">
+{% endblock %}
+
+{% block js %}
+  <script>
+    function show(letter){
+      var items = {{names|pager:True|safe}};
+      console.log(items);
+      if (letter.length == 0){
+        items = $.map( Object.values(items), function(n){
+                  return n;
+                });
+      }else{
+        items = items[letter];
+      }
+      $("#pag_content").html('<ul class="paginator">');
+      $.each(items, function(index) {
+        var obj = items[index];
+        var line = "<li><a href='{{link}}"+obj['id']+"'>"+obj['name_en'];
+        if (obj['name_en'] != obj['name_orig']){
+          line += " (" + obj['name_orig'] + ")";
+        }
+        line += "</a></li>";
+        $("#pag_content").append(line);
+      });
+      $("#page_content").append("</ul>");
+    }
+    $(document).ready(function () {
+      show('');
+    });
+  </script>
+{% endblock %}
+
+{% block title %}{{_('browse_names.title')}}{% endblock %}
+{% block content %}
+
+<div class="card border-secondary">
+  <div class="card-body">
+    <nav aria-label="...">
+      <ul class="pagination pagination-sm justify-content-center">
+        <li class="page-item">
+          <a class="page-link" href="javascript:show('')">All</a>
+        </li>
+        {% for letter in names|pager %}
+          <li class="page-item">
+            <a class="page-link" href="javascript:show('{{letter}}')">{{ letter }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    </nav>
+
+    <div id="pag_content"> </div>
+  </div>
+</div>
+{% endblock %}

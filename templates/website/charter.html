@@ -1,0 +1,25 @@
+{% extends 'website/layouts/master-page' %}
+{% block css %}
+  <link href="/static/css/datatables.min.css" rel="stylesheet">
+  <link href="/static/css/songtable.css" rel="stylesheet">
+{% endblock %}
+{% block js %}
+  <script type="text/javascript" src="/static/js/datatables.min.js"></script>
+  <script type="text/javascript" src="/static/js/songtable.js"></script>
+{% endblock %}
+
+{% block title %} {{_('charter.title')}} “{{  charter.charter_name }}” {% endblock %}
+{% block content %}
+  <div class="card">
+    <div class="card-body">
+      {{_('charter.text')}} {{ charter.charter_name }}
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      {% include 'website/subpages/songtable.html' %}
+    </div>
+  </div>
+
+{% endblock %}

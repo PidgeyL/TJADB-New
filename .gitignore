@@ -1,0 +1,11 @@
+__pycache__
+
+**/locale/en
+**/locale/es
+**/locale/ja
+**/migrations
+
+static/
+media/
+
+db.sqlite3

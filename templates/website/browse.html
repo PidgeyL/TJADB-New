@@ -1,0 +1,27 @@
+{% extends 'website/layouts/master-page' %}
+{% load static %}
+
+{% block css %}
+  <link href="{% static 'website/css/datatables.min.css' %}" rel="stylesheet">
+  <link href="{% static 'website/css/songtable.css' %}" rel="stylesheet">
+{% endblock %}
+{% block js %}
+  <script type="text/javascript" src="{% static 'website/js/datatables.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'website/js/songtable.js' %}"></script>
+{% endblock %}
+
+{% block title %}{{_('browse.title')}}{% endblock %}
+{% block content %}
+  <div class="card">
+    <div class="card-body">
+      {{ _('browse.text')}}
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      {% include 'website/subpages/songtable.html' %}
+    </div>
+  </div>
+
+{% endblock %}

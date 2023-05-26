@@ -1,0 +1,48 @@
+{% extends 'website/layouts/master-page' %}
+{% block css %}
+  <link href="/static/css/datatables.min.css" rel="stylesheet">
+  <link href="/static/css/songtable.css" rel="stylesheet">
+{% endblock %}
+
+{% block title %}{{_('index.title')}}{% endblock %}
+{% block content %}
+  <div>
+    <img src="/static/website/imgs/header.png" class="img-fluid rounded">
+  </div>
+
+  <div class="card border-secondary">
+    <div class="card-header">{{_('index.about.h')}}</div>
+    <div class="card-body">
+      {{_('index.about.text1')}} <a href="/browse">{{_('index.about.a')}}</a>
+      {{_('index.about.text2')}}
+    </div>
+  </div>
+
+  <div class="card border-primary">
+    <div class="card-header"> {{_('index.donate.h')}}</div>
+    <div class="card-body">
+      <p> {{_('index.donate.p1')}} </p>
+      <p>
+        {{_('index.donate.p2a')}} <a href="/donate"> {{_('index.donate.a')}} </a>
+        {{_('index.donate.p2b')}}
+      </p>
+    </div>
+  </div>
+
+  <div class="card border-secondary">
+    <div class="card-header"> {{_('index.submit.h')}} </div>
+    <div class="card-body">
+      {{_('index.submit.text')}}
+    </div>
+  </div>
+
+  <div class="card border-secondary">
+    <div class="card-header">{{_('index.involved.h')}}</div>
+    <div class="card-body">
+      {{_('index.involved.text1')}}
+      <b><a href="https://github.com/PidgeyL/TJADB">GitHub</a></b>.
+      {{_('index.involved.text2')}}
+    </div>
+  </div>
+
+{% endblock %}

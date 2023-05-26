@@ -1,0 +1,115 @@
+{% load filters %}
+{% load static %}
+
+<div>
+    Show/Hide: 
+    <a class="toggle-vis" data-column="1">{{_('table.artist')}}</a> -
+    <a class="toggle-vis" data-column="2">{{_('table.source')}}</a> -
+    <a class="toggle-vis" data-column="3">{{_('table.bpm')}}</a> -
+    <a class="toggle-dif" data-column="4">{{_('table.difficulty')}}</a> -
+    <a class="toggle-vis" data-column="9">{{_('table.charter')}}</a> -
+    <a class="toggle-vis" data-column="10">{{_('table.genre')}}</a> -
+    <a class="toggle-vis" data-column="11">{{_('table.updated')}}</a> -
+    <a class="toggle-vis" data-column="12">{{_('table.uploaded')}}</a>
+    <div style="float:right">
+      {{_('table.download')}}: 
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="download" id="orig" checked>
+        <label class="form-check-label" for="orig"> {{_('table.orig')}} </label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="download" id="eng">
+        <label class="form-check-label" for="trans"> {{_('table.eng')}} </label>
+      </div>
+    </div>
+</div>
+<table id="dtSongTable" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+  <thead>
+    <tr>
+      <th class="th-sm"> {{_('table.name')}}    </th>
+      <th class="th-sm"> {{_('table.artist')}}  </th>
+      <th class="th-sm"> {{_('table.source')}}  </th>
+      <th class="th-sm fit"> {{_('table.bpm')}} </th>
+      <th class="th-sm">  <img src="{% static 'website/imgs/kantan.png' %}"     alt="かんたん(easy)">        </th>
+      <th class="th-sm">  <img src="{% static 'website/imgs/futsuu.png' %}"     alt="ふつう(Normal)">        </th>
+      <th class="th-sm">  <img src="{% static 'website/imgs/muzukashii.png' %}" alt="むずかしい(Difficult)"> </th>
+      <th class="th-sm">  <img src="{% static 'website/imgs/oni.png' %}"        alt="おに(Extreme)">         </th>
+      <th class="th-sm">  <img src="{% static 'website/imgs/ura.png' %}"        alt="うら(Extreme Alt.)">    </th>
+      <th class="th-sm"> {{_('table.charter')}}  </th>
+      <th class="th-sm"> {{_('table.genre')}}    </th>
+      <th class="th-sm"> {{_('table.updated')}}  </th>
+      <th class="th-sm"> {{_('table.uploaded')}} </th>
+      <th class="th-sm"> </th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for song in songlist %}
+      <tr data-html="true" class="{{ song.genre.name_tja }}" data-toggle="tooltip" data-placement="top" title="song|songinfo">
+        <td class="song-name">
+          {{ song.title_en }}
+          {% if song.title_en != song.title_orig %}
+            <br /> ({{ song.title_orig }})
+          {% endif %}
+          {% if song.video %}
+            <div class="ribbon-vid">
+              <div class="ribbon-vid-content"> <span class="bi bi-play-btn-fill"></span> </div>
+            </div>
+          {% endif %}
+          {% if song.uploaded|isnew %}
+            <div class="ribbon-new">
+              <div class="ribbon-new-content"> <div> New </div> </div>
+            </div>
+          {% endif %}
+        </td>
+        <td>
+          {% for art in song.artists|queryset %}
+            <span class="badge rounded-pill bg-light small-pill">
+              <a href="/browse_artist/{{art.id}}">
+                  {{ art.name_en }}
+                  {% if art.name_en != art.name_orig %}
+                    <br /> ({{ art.name_orig }})
+                  {% endif %}
+              </a>
+            </span>
+          {% endfor %}
+        </td>
+        <td>
+          {% if song.source.name_en %}
+            <span class="badge rounded-pill bg-secondary small-pill">
+              <a href="/browse_source/{{song.source.id}}" style="color:white;">
+                {{ song.source.name_en }}
+                {% if song.source.name_en != song.source.name_orig %}
+                  <br /> ({{ song.source.name_orig }})
+                {% endif %}
+              </a>
+            </span>
+          {% endif %}
+        </td>
+        <td> {{ song.bpm | number_format }}               </td>
+        <td> {{ song.difficulty_easy | number_format }}   </td>
+        <td> {{ song.difficulty_normal | number_format }} </td>
+        <td> {{ song.difficulty_hard | number_format }}   </td>
+        <td> {{ song.difficulty_oni | number_format }}    </td>
+        <td> {{ song.difficulty_ura | number_format }}    </td>
+        <td>
+          {% for c in song|charters %}
+            <span class="badge rounded-pill bg-secondary small-pill">
+              <a href="/browse_charter/{{c.id}}" style="color:white;">
+                {{ c.charter_name }}
+              </a>
+            </span>
+          {% endfor %}
+        </td>
+        <td data-order="{{song.genre.id}}">
+           {{ song.genre.name_en }}
+           {% if song.genre.name_en != song.genre.name_jp %}
+             </br> ({{ song.genre.name_jp }})
+           {% endif %}
+        </td>
+        <td> {{ song.last_updated }} </td>
+        <td> {{ song.uploaded }} </td>
+        <td> <a href="javascript:download({{song.id}})"><i class="bi bi-cloud-download"></i></a></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
