@@ -19,7 +19,10 @@ def queryset(value):
 @register.filter(name="number_format")
 def number_format(number):
     if isinstance(number, type(None)):
-        return ''
+        return '-'
+    if isinstance(number, float):
+        if int(number) == number:
+            number = int(number)
     return str(number)
 
 @register.filter(name="charters")

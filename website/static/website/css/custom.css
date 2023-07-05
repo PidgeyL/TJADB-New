@@ -20,6 +20,15 @@ body {
     min-width:        1000px;
 }
 
+#sotd{
+    margin-left: 5px;
+    float: right;
+    width: 260px;
+    clear: left;
+    text-align: center;
+}
+
+
 .error{
   border-color:red;
 }

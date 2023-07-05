@@ -7,7 +7,8 @@ import api.views as api
 # Create your views here.
 # /
 def index(request):
-    return render(request, 'website/index.html', None)
+    sotd = api.sotd()
+    return render(request, 'website/index.html', {'sotd': sotd})
 
 # /artists
 def artists(request):

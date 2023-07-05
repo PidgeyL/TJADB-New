@@ -1,4 +1,7 @@
 {% extends 'website/layouts/master-page' %}
+
+{% load filters %}
+{% load static %}
 {% block css %}
   <link href="/static/css/datatables.min.css" rel="stylesheet">
   <link href="/static/css/songtable.css" rel="stylesheet">
@@ -9,6 +12,52 @@
   <div>
     <img src="/static/website/imgs/header.png" class="img-fluid rounded">
   </div>
+
+  <div id="sotd" class="card border-primary">
+    <div class="card-header">{{_('index.sotd.h')}}</div>
+        <div class="card-body">
+          {{ sotd.title_en }}
+          {% if sotd.title_en != sotd.title_orig %}
+            <br /> ({{ sotd.title_orig }})
+          {% endif %}
+          <hr />
+          {{ sotd.difficulty_easy | number_format }} /
+          {{ sotd.difficulty_normal | number_format }} /
+          {{ sotd.difficulty_hard | number_format }} /
+          {{ sotd.difficulty_oni | number_format }} /
+          {{ sotd.difficulty_ura | number_format }}
+          <hr />
+          {% for art in sotd.artists|queryset %}
+            <span class="badge rounded-pill bg-light small-pill">
+              <a href="/browse_artist/{{art.id}}">
+                {{ art.name_en }}
+                {% if art.name_en != art.name_orig %}
+                  <br /> ({{ art.name_orig }})
+                {% endif %}
+              </a>
+            </span>
+          {% endfor %}
+
+          {% if sotd.source.name_en %}
+            <span class="badge rounded-pill bg-secondary small-pill">
+              <a href="/browse_source/{{song.source.id}}" style="color:white;">
+                {{ sotd.source.name_en }}
+                {% if sotd.source.name_en != sotd.source.name_orig %}
+                  <br /> ({{ sotd.source.name_orig }})
+                {% endif %}
+              </a>
+            </span>
+          {% endif %}
+          {% for c in sotd|charters %}
+            <span class="badge rounded-pill bg-dark small-pill">
+              <a href="/browse_charter/{{c.id}}" style="color:white;">
+                {{ c.charter_name }}
+              </a>
+            </span>
+          {% endfor %}
+        </div>
+  </div>
+
 
   <div class="card border-secondary">
     <div class="card-header">{{_('index.about.h')}}</div>
