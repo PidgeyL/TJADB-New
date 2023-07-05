@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 import os
 from pathlib import Path
 
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -40,8 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-#    'phrase', # Localization
 
     'api',
     'website',
@@ -130,7 +128,7 @@ USE_TZ = True
 
 STATIC_URL  = '/static/'
 MEDIA_URL   = '/home/pidgey/Git/tjadb/website/media/'
-STATIC_ROOT = os.path.join(BASE_DIR, STATIC_URL)
+STATIC_ROOT = STATIC_URL
 MEDIA_ROOT  = os.path.join(BASE_DIR, MEDIA_URL)
 
 # Default primary key field type
