@@ -165,6 +165,7 @@ class Song(models.Model):
     in_progress            = models.BooleanField(default=False)
     help_requested         = models.BooleanField(default=False)
     review_requested       = models.BooleanField(default=False)
+    has_lyrics             = models.BooleanField(default=False)
     # hidden metadata
     tja_md5                = models.CharField(null=False, blank=False, max_length=32, unique=True)
     audio_md5              = models.CharField(null=False, blank=False, max_length=32)
@@ -212,7 +213,8 @@ class Song(models.Model):
             "flags": {
                 "in_progress":      self.in_progress,
                 "help_requested":   self.help_requested,
-                "review_requested": self.review_requested
+                "review_requested": self.review_requested,
+                "has_lyrics":       self.has_lyrics
             }
         }
     class Meta:
