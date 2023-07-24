@@ -27,6 +27,8 @@ def number_format(number):
 
 @register.filter(name="charters")
 def charters(song):
+    if not song:
+        return []
     charters = [song.charter, song.charter_easy, song.charter_normal,
                 song.charter_hard, song.charter_oni, song.charter_ura]
     return sorted( set( [a for a in charters if a] ) )
