@@ -5,3 +5,10 @@ class DictObj(dict):
         self[attr] = value
     def serialize(self):
         return self
+
+
+def clean_path(path):
+    for c in  "%:/,.\\[]<>*?":
+        path = path.replace(c, '_')
+    return path
+

@@ -97,7 +97,7 @@
         </td>
         <td> {{ song.last_updated }} </td>
         <td> {{ song.uploaded }} </td>
-        <td> <a href="javascript:download({{song.id}})"><i class="bi bi-cloud-download"></i></a></td>
+        <td> <a href="/download/{{song.id}}"><i class="bi bi-cloud-download"></i></a></td>
       </tr>
     {% endfor %}
   </tbody>

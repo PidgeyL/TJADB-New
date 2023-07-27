@@ -35,6 +35,7 @@ urlpatterns = [
     path('api/sources',                 api.sources),
     path('api/source/<int:id>',         api.source),
     path('api/sotd',                    api.sotd),
+    path('download/<int:id>',           api.download),
 
     path('',                        website.index),
     path('artists/',                website.artists),

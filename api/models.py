@@ -9,7 +9,8 @@ from django.utils               import timezone
 run_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(run_path, ".."))
 
-from tjadb.Config import Config
+from tjadb.Config  import Config
+from lib.templates import DOWNLOAD_STRING
 
 LANGUAGE_CHOICES = (
     ('en', 'English'),
@@ -18,11 +19,13 @@ LANGUAGE_CHOICES = (
 )
 
 
-# Create your models here.
+####
+# Genre
 class Genre(models.Model):
     name_jp  = models.CharField(null=False, blank=False, max_length=31, unique=True)
     name_en  = models.CharField(null=False, blank=False, max_length=31, unique=True)
     name_tja = models.CharField(null=False, blank=False, max_length=31, unique=True)
+    # API Serialize
     def serialize(self):
         return{
             'id':       self.id,
@@ -30,18 +33,22 @@ class Genre(models.Model):
             'name_en':  self.name_en,
             'name_tja': self.name_tja
         }
+    # Indexes
     class Meta:
         indexes = [
             models.Index(fields=["name_tja"])
         ]
 
 
+####
+# Artist
 class Artist(models.Model):
     name_orig = models.CharField(null=False, blank=False, max_length=63)
     name_en   = models.CharField(null=False, blank=False, max_length=63)
     link      = models.URLField(null=True,  blank=True)
     about     = models.TextField(null=True,  blank=True)
     image     = models.ImageField(null=True, blank=True, upload_to=Config.artist_image)
+    # API Serialize
     def serialize(self):
         return {
             "id":        self.id,
@@ -51,6 +58,7 @@ class Artist(models.Model):
             "about":     self.about,
             "image":     self.image.url if self.image else None
         }
+    # Indexes & Uniques
     class Meta:
         indexes = [
             models.Index(fields=["name_orig"]),
@@ -61,6 +69,8 @@ class Artist(models.Model):
         ]
 
 
+####
+# Source
 class Source(models.Model):
     name_orig = models.CharField(null=False, blank=False, max_length=63)
     name_en   = models.CharField(null=False, blank=False, max_length=63)
@@ -68,6 +78,7 @@ class Source(models.Model):
     about     = models.TextField(null=True,  blank=True)
     image     = models.ImageField(null=True, blank=True, upload_to=Config.artist_image)
     genre     = models.ForeignKey(Genre, on_delete=models.PROTECT)
+    # API Serialize
     def serialize(self):
         return {
             "id":        self.id,
@@ -78,6 +89,7 @@ class Source(models.Model):
             "image":     self.image.url if self.image else None,
             "genre":     self.genre.serialize()
         }
+    # Indexes & Uniques
     class Meta:
         indexes = [
             models.Index(fields=["name_orig"]),
@@ -89,6 +101,8 @@ class Source(models.Model):
         ]
 
 
+####
+# Users & Charters
 class User(models.Model):
     user               = models.OneToOneField(User, on_delete=models.CASCADE)
     discord_id         = models.BigIntegerField(null=True, blank=True,                 unique=True)
@@ -97,6 +111,7 @@ class User(models.Model):
     preferred_language = models.CharField(max_length=2, choices=LANGUAGE_CHOICES)
     about              = models.TextField(null=True,       blank=True)
     # Django groups will be used to decide who can upload songs etc
+    # API Serialize
     def serialize(self):
             return {
                 "id":                 self.id,
@@ -106,19 +121,23 @@ class User(models.Model):
                 "preferred_language": self.preferred_language,
                 "about":              self.about
             }
+    # Comparing users
     def __hash__(self):
         return hash(str(self.id))
     def __eq__(self, other):
         return isinstance(other, self.__class__) and self.id == other.id
+    def __lt__(self, other):
+        return self.id < other.id
+    # Indexes
     class Meta:
         indexes = [
             models.Index(fields=["discord_id"]),
             models.Index(fields=["charter_name"])
         ]
-    def __lt__(self, other):
-        return self.id < other.id
 
 
+####
+# Song
 class Song(models.Model):
     # Metadata
     title_orig             = models.CharField(null=False,  blank=False, max_length=127)
@@ -171,6 +190,8 @@ class Song(models.Model):
     audio_md5              = models.CharField(null=False, blank=False, max_length=32)
     video_md5              = models.CharField(null=True,  blank=True,  max_length=32)
     picture_md5            = models.CharField(null=True,  blank=True,  max_length=32)
+
+    # API Serialize
     def serialize(self):
         return {
             "id":            self.id,
@@ -217,6 +238,21 @@ class Song(models.Model):
                 "has_lyrics":       self.has_lyrics
             }
         }
+    # Infostring for download
+    def info_string(self):
+        _course = lambda course: str(course) if course else "*"
+
+        diff = [self.difficulty_easy, self.difficulty_normal, self.difficulty_hard,
+                self.difficulty_oni,  self.difficulty_ura]
+        diff = '/'.join([_course(d) for d in diff])
+        charters = [self.charter,      self.charter_easy, self.charter_normal,
+                    self.charter_hard, self.charter_oni,  self.charter_ura]
+        charters = ' & '.join( {c.charter_name for c in charters if c} )
+        artists  = ' & '.join( [a.name_en for a in self.artists.get_queryset()])
+        source   = self.source.name_en if self.source else " - "
+        return DOWNLOAD_STRING%(self.title_en, artists, source, charters, diff,
+                                self.genre.name_en, self.bpm, Config.domain_name, self.id)
+    # Indexes
     class Meta:
         indexes = [
             models.Index(fields=["title_orig"]),
@@ -230,12 +266,18 @@ class Song(models.Model):
             models.Index(fields=["review_requested"])
         ]
 
+
+####
+# Rating
 class Rating(models.Model):
     user    = models.ForeignKey(User, null= False, blank=False, on_delete=models.PROTECT)
     song    = models.ForeignKey(Song, null= False, blank=False, on_delete=models.PROTECT)
     rating  = models.PositiveSmallIntegerField(null=False, blank=False, validators=[MaxValueValidator(10)])
     comment = models.TextField(null=True,   blank=True)
 
+
+####
+# Song of the day
 class SotD(models.Model):
     song = models.ForeignKey(Song, null=False, blank=False, on_delete=models.PROTECT, )
     date = models.DateField(       null=False, blank=False, primary_key=True , default=timezone.now,)

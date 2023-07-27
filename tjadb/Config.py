@@ -45,3 +45,9 @@ class Config():
     @property
     def song_preview_audio(cls):
         return "songs/preview/audio"
+
+
+    @classmethod
+    @property
+    def domain_name(cls):
+        return "localhost:8000"
