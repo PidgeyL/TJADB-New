@@ -1,0 +1,15 @@
+[paths]
+media_root:           /path/to/media/folder
+artist_image:         artists
+profile_picture:      profile_pictures
+song_picture:         songs/pictures
+song_video:           songs/videos
+song_audio:           songs/audio
+song_preview_picture: songs/preview/pictures
+song_preview_audio:   songs/preview/audio
+
+[server]
+hosts:  localhost
+port:   8000
+domain: localhost
+secret: <change_your_secret_here>

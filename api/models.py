@@ -9,7 +9,7 @@ from django.utils               import timezone
 run_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(run_path, ".."))
 
-from tjadb.Config  import Config
+from tjadb.config  import Config
 from lib.templates import DOWNLOAD_STRING
 
 LANGUAGE_CHOICES = (

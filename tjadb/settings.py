@@ -11,10 +11,9 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 import os
-from pathlib import Path
-
+from pathlib                  import Path
 from django.utils.translation import gettext_lazy as _
-
+from tjadb.config             import Config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-pxl#h%^9fy!(l5-4pd3*uz+b8oy@)#z)umdky)10%mo^63^^cs'
+SECRET_KEY = Config.server_secret
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -112,7 +111,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = 'es'
+LANGUAGE_CODE = 'en'
 
 TIME_ZONE = 'UTC'
 
@@ -127,7 +126,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL  = 'static/'
-MEDIA_URL   = '/home/pidgey/Git/tjadb/website/media/'
+MEDIA_URL   = Config.media_root
 STATIC_ROOT = STATIC_URL
 MEDIA_ROOT  = os.path.join(BASE_DIR, MEDIA_URL)
 
