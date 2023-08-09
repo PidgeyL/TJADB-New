@@ -33,6 +33,9 @@ class Genre(models.Model):
             'name_en':  self.name_en,
             'name_tja': self.name_tja
         }
+    # Admin panel name
+    def __str__(self):
+        return self.name_en
     # Indexes
     class Meta:
         indexes = [
@@ -58,6 +61,9 @@ class Artist(models.Model):
             "about":     self.about,
             "image":     self.image.url if self.image else None
         }
+    # Admin panel name
+    def __str__(self):
+        return self.name_en
     # Indexes & Uniques
     class Meta:
         indexes = [
@@ -89,6 +95,9 @@ class Source(models.Model):
             "image":     self.image.url if self.image else None,
             "genre":     self.genre.serialize()
         }
+    # Admin panel name
+    def __str__(self):
+        return self.name_en
     # Indexes & Uniques
     class Meta:
         indexes = [
@@ -121,6 +130,9 @@ class User(models.Model):
                 "preferred_language": self.preferred_language,
                 "about":              self.about
             }
+    # Admin panel name
+    def __str__(self):
+        return self.charter_name
     # Comparing users
     def __hash__(self):
         return hash(str(self.id))
@@ -252,6 +264,9 @@ class Song(models.Model):
         source   = self.source.name_en if self.source else " - "
         return DOWNLOAD_STRING%(self.title_en, artists, source, charters, diff,
                                 self.genre.name_en, self.bpm, Config.domain_name, self.id)
+    # Admin panel name
+    def __str__(self):
+        return self.title_en
     # Indexes
     class Meta:
         indexes = [
