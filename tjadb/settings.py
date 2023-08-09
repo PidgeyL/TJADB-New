@@ -28,7 +28,7 @@ SECRET_KEY = Config.server_secret
 DEBUG = True
 
 ALLOWED_HOSTS = Config.hosts
-
+CSRF_TRUSTED_ORIGINS = ['https://'+h for h in Config.hosts]
 
 # Application definition
 
