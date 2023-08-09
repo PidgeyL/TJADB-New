@@ -85,6 +85,11 @@ class Config():
     ##########
     @classmethod
     @property
+    def hosts(cls):
+        return cls.read_setting("server", "hosts").split(" ")
+
+    @classmethod
+    @property
     def domain_name(cls):
         host = cls.read_setting("server", "domain")
         port = cls.read_setting("server", "port")
