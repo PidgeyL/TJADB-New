@@ -159,8 +159,8 @@ class Song(models.Model):
     bpm                    = models.FloatField(null=False, blank=False)
     info                   = models.TextField(null=True,   blank=True)
     video_link             = models.URLField(null=True,    blank=True)
-    genre                  = models.ForeignKey(Genre,  on_delete=models.PROTECT)
-    source                 = models.ForeignKey(Source, on_delete=models.PROTECT)
+    genre                  = models.ForeignKey(Genre,  null=False, blank=False, on_delete=models.PROTECT)
+    source                 = models.ForeignKey(Source, null=True,  blank=True,  on_delete=models.PROTECT)
     artists                = models.ManyToManyField(Artist)
     downloads              = models.PositiveIntegerField(null=False,     blank=False, default=0)
     # Download files
