@@ -296,3 +296,6 @@ class Rating(models.Model):
 class SotD(models.Model):
     song = models.ForeignKey(Song, null=False, blank=False, on_delete=models.PROTECT, )
     date = models.DateField(       null=False, blank=False, primary_key=True , default=timezone.now,)
+    # Admin panel name
+    def __str__(self):
+        return self.date.strftime("%Y-%m-%d - ") + self.song.title_en
