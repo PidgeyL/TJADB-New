@@ -34,15 +34,18 @@ def browse(request):
 
 # /browse_artist/<id>
 def browse_artist(request, id=None):
-    return render(request, 'website/artist.html',  {'songlist': api.browse_artist(id=id)})
+    return render(request, 'website/artist.html',  {'songlist': api.browse_artist(id=id),
+                                                    'artist':   api.artist(id=id) })
 
 # /browse_charter/<id>
 def browse_charter(request, id=None):
-    return render(request, 'website/charter.html', {'songlist': api.browse_charter(id=id)})
+    return render(request, 'website/charter.html', {'songlist': api.browse_charter(id=id),
+                                                    'charter':  api.charter(id=id) })
 
 # /browse_source/<id>
 def browse_source(request, id=None):
-    return render(request, 'website/source.html',  {'songlist': api.browse_source(id=id)})
+    return render(request, 'website/source.html',  {'songlist': api.browse_source(id=id),
+                                                    'source':   api.source(id=id) })
 
 # /donate
 def donate(request):

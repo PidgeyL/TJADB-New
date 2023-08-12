@@ -1,11 +1,11 @@
 {% extends 'website/layouts/master-page' %}
 {% block css %}
-  <link href="/static/css/datatables.min.css" rel="stylesheet">
-  <link href="/static/css/songtable.css" rel="stylesheet">
+  <link href="{% static 'website/css/datatables.min.css' %}" rel="stylesheet">
+  <link href="{% static 'website/css/songtable.css' %}" rel="stylesheet">
 {% endblock %}
 {% block js %}
-  <script type="text/javascript" src="/static/js/datatables.min.js"></script>
-  <script type="text/javascript" src="/static/js/songtable.js"></script>
+  <script type="text/javascript" src="{% static 'website/js/datatables.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'website/js/songtable.js' %}"></script>
 {% endblock %}
 
 {% block title %}{{_('source.title')}} “{{source.name_en}}”{% endblock %}
