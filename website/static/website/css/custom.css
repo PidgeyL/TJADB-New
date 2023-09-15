@@ -55,6 +55,25 @@ body {
   padding: 7px;
 }
 
+#p_pfp{
+    height: 160px;
+    width:  160px;
+    float: left;
+    margin-right: 20px;
+    clear:both;
+}
+
+#artist_info{
+    margin-top: 20px;
+}
+
+#artist_info > p{
+    font-size: 1.5em;
+    overflow:auto;
+    display:block;
+    padding-left: 8px;
+    border-left: 5px solid #777777;
+}
 
 @keyframes swing {
   0% {

@@ -25,6 +25,10 @@ def number_format(number):
             number = int(number)
     return str(number)
 
+@register.filter(name="newline")
+def newline(text):
+    return text.replace(". ", ".<br />")
+
 @register.filter(name="charters")
 def charters(song):
     if not song:

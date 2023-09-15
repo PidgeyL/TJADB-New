@@ -1,4 +1,5 @@
 {% extends 'website/layouts/master-page' %}
+{% load filters %}
 {% load static %}
 
 {% block css %}
@@ -14,11 +15,23 @@
 {% block content %}
   <div class="card">
     <div class="card-body">
-      {{_('artist.text')}}
-      {{ artist.name_en }}
-      {% if artist.name_en != artist.name_orig %}
-        <br /> ({{ artist.name_orig }})
-      {% endif %}
+      <h1>
+        {{_('artist.text')}}
+        {{ artist.name_en }}
+        {% if artist.name_en != artist.name_orig %}
+          ({{ artist.name_orig }})
+        {% endif %}
+      </h1>
+      <div id="artist_info">
+        {% if artist.image %}
+          <img id="p_pfp" src="{{artist.image.url}}" class="rounded-circle">
+        {% else %}
+          <img id="p_pfp" src="{% static 'website/imgs/no_image.png' %}" class="rounded-circle">
+        {% endif %}
+        <p>
+          {{artist.about|newline|safe}}
+        </p>
+      </div>
     </div>
   </div>
 
