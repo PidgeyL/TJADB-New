@@ -97,7 +97,13 @@
         </td>
         <td> {{ song.last_updated }} </td>
         <td> {{ song.uploaded }} </td>
-        <td> <a href="/download/{{song.id}}"><i class="bi bi-cloud-download"></i></a></td>
+        <td>
+          <audio controls id="player">
+            <source src="{{song.preview_audio.url}}" type="audio/x-m4a">
+              Your browser does not support the audio element.
+          </audio>
+          <a href="/download/{{song.id}}"><i class="bi bi-cloud-download"></i></a>
+        </td>
       </tr>
     {% endfor %}
   </tbody>
