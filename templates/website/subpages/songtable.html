@@ -98,10 +98,10 @@
         <td> {{ song.last_updated }} </td>
         <td> {{ song.uploaded }} </td>
         <td>
-          <audio controls id="player">
-            <source src="{{song.preview_audio.url}}" type="audio/x-m4a">
-              Your browser does not support the audio element.
+          <audio id="preview_{{song.id}}" style="display:none" src="{{song.preview_audio.url}}" type="audio/x-m4a">
           </audio>
+          <i id="play_{{song.id}}" class="fa fa-play pointer"  onclick="playpreview({{song.id}})"></i>
+          <i id="stop_{{song.id}}" class="fa fa-pause pointer" onclick="stoppreview({{song.id}})" style="display: none"></i>
           <a href="/download/{{song.id}}"><i class="bi bi-cloud-download"></i></a>
         </td>
       </tr>

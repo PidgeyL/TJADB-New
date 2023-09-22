@@ -1,10 +1,15 @@
-function download(ID) {
-    if ($("#orig").prop("checked")){
-      var type = "orig";
-    }else{
-      var type = "eng";
-    }
-    window.location.href = "/download/"+ type + '/' + ID;
+function playpreview(ID){
+    $("#preview_"+ID).get(0).play();
+    $("#play_"+ID).hide();
+    $("#stop_"+ID).show();
+}
+
+function stoppreview(ID){
+    console.log($("#preview_"+ID));
+    console.log($("#preview_"+ID).get(0));
+    $("#preview_"+ID).get(0).pause();
+    $("#play_"+ID).show();
+    $("#stop_"+ID).hide();
 }
 
 $(document).ready(function () {
