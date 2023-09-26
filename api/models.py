@@ -1,3 +1,4 @@
+import hashlib
 import os
 import sys
 
@@ -9,6 +10,7 @@ from django.utils               import timezone
 run_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(run_path, ".."))
 
+import lib.TJA as tja
 from tjadb.config  import Config
 from lib.templates import DOWNLOAD_STRING
 
@@ -202,6 +204,16 @@ class Song(models.Model):
     audio_md5              = models.CharField(null=False, blank=False, max_length=32)
     video_md5              = models.CharField(null=True,  blank=True,  max_length=32)
     picture_md5            = models.CharField(null=True,  blank=True,  max_length=32)
+
+    # Auto-update fields on save
+    def save(self, *args, **kwargs):
+        self.audio_md5 = hashlib.md5(self.audio.read()).hexdigest()
+        self.tja_md5   = hashlib.md5(tja.encode(self.tja)).hexdigest()
+        if self.video:
+            self.video_md5 = hashlib.md5(tja.encode(self.video.read())).hexdigest()
+        if self.picture:
+            self.picture_md5 = hashlib.md5(tja.encode(self.picture.read())).hexdigest()
+        super(Song, self).save(*args, **kwargs)
 
     # API Serialize
     def serialize(self):
