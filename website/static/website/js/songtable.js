@@ -5,8 +5,6 @@ function playpreview(ID){
 }
 
 function stoppreview(ID){
-    console.log($("#preview_"+ID));
-    console.log($("#preview_"+ID).get(0));
     $("#preview_"+ID).get(0).pause();
     $("#play_"+ID).show();
     $("#stop_"+ID).hide();
