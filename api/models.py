@@ -210,9 +210,9 @@ class Song(models.Model):
         self.audio_md5 = hashlib.md5(self.audio.read()).hexdigest()
         self.tja_md5   = hashlib.md5(tja.encode(self.tja)).hexdigest()
         if self.video:
-            self.video_md5 = hashlib.md5(tja.encode(self.video.read())).hexdigest()
+            self.video_md5 = hashlib.md5(self.video.read()).hexdigest()
         if self.picture:
-            self.picture_md5 = hashlib.md5(tja.encode(self.picture.read())).hexdigest()
+            self.picture_md5 = hashlib.md5(self.picture.read()).hexdigest()
         super(Song, self).save(*args, **kwargs)
 
     # API Serialize
