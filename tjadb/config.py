@@ -16,7 +16,8 @@ class Config():
                           'song_preview_audio':   'songs/preview/audio'},
                'server': {'hosts':  'localhost',  'port': 8000,
                           'domain': 'localhost',
-                          'secret': 'default_insecure_key_+b8oy@)#z)umdky)10%mo'}}
+                          'secret': 'default_insecure_key_+b8oy@)#z)umdky)10%mo'},
+               'audio':  {'preview_length': 20}}
 
 
     @classmethod
@@ -99,3 +100,11 @@ class Config():
     @property
     def server_secret(cls):
         return cls.read_setting("server", "secret")
+
+    #########
+    # Audio #
+    #########
+    @classmethod
+    @property
+    def preview_length(cls):
+        return cls.read_setting("audio", "preview_length")

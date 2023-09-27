@@ -13,3 +13,6 @@ hosts:  localhost
 port:   8000
 domain: localhost
 secret: <change_your_secret_here>
+
+[audio]
+preview_length: 20

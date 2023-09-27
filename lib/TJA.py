@@ -1,3 +1,4 @@
+from tjadb.config import Config
 
 def clean_path(path):
     for c in  "%:/,.\\[]<>*?":
@@ -72,3 +73,16 @@ def set_meta(tja_text, wave=None, movie=None, image=None):
             line = line.split(':')[0] + ':' + image
         new_tja = new_tja + line + '\r\n'
     return new_tja
+
+
+def song_preview(tja_text):
+    length = Config.preview_length
+    start  = 0.0
+    lval   = lambda l:l.split(':')[1].strip()
+
+    for line in tja_text.splitlines():
+        line  = line.strip().lower()
+        if line.startswith('demostart:'):
+            start = float(line.split(':')[1].strip())
+            break
+    return start, start + length

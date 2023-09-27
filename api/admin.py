@@ -28,7 +28,7 @@ class UserAdmin(admin.ModelAdmin):
         return queryset
 
 class SongAdmin(admin.ModelAdmin):
-    exclude = ("audio_md5", "tja_md5", "video_md5", "picture_md5")
+    exclude = ("preview_audio", "audio_md5", "tja_md5", "video_md5", "picture_md5")
 
     def get_queryset(self, request):
         queryset = super(SongAdmin, self).get_queryset(request)

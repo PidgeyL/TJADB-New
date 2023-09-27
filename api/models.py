@@ -1,9 +1,13 @@
 import hashlib
+import io
 import os
 import sys
 
+import pydub
+
 from django.db                  import models
 from django.contrib.auth.models import User
+from django.core.files.base     import File
 from django.core.validators     import MinValueValidator, MaxValueValidator
 from django.utils               import timezone
 
@@ -207,7 +211,16 @@ class Song(models.Model):
 
     # Auto-update fields on save
     def save(self, *args, **kwargs):
-        self.audio_md5 = hashlib.md5(self.audio.read()).hexdigest()
+        # Audio Preview
+        start, end = tja.song_preview(self.tja)
+        audio   = self.audio.read()
+        preview = pydub.AudioSegment.from_file(io.BytesIO(audio))[start*1000:end*1000]
+        buffer = io.BytesIO()
+        preview.export(buffer, format="ogg")
+        buffer.seek(0)
+        self.preview_audio = File(buffer, name="preview.ogg")
+        # MD5 calculations
+        self.audio_md5 = hashlib.md5(audio).hexdigest()
         self.tja_md5   = hashlib.md5(tja.encode(self.tja)).hexdigest()
         if self.video:
             self.video_md5 = hashlib.md5(self.video.read()).hexdigest()
