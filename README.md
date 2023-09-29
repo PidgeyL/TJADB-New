@@ -16,9 +16,12 @@ source venv/bin/activate
 ```
 
 ### Installing the requirements
+This project mostly relies on python packages. These can be installed through:
 ``` shell
 pip install -r website/requirements.txt
 ```
+However, `ffmpeg` is required to programmatically create the audio previews.
+This has to be installed manuallhy, or through your package manager.
 
 
 ### Localization

@@ -216,9 +216,9 @@ class Song(models.Model):
         audio   = self.audio.read()
         preview = pydub.AudioSegment.from_file(io.BytesIO(audio))[start*1000:end*1000]
         buffer = io.BytesIO()
-        preview.export(buffer, format="ogg")
+        preview.export(buffer, format="mp3")
         buffer.seek(0)
-        self.preview_audio = File(buffer, name="preview.ogg")
+        self.preview_audio = File(buffer, name="preview.mp3")
         # MD5 calculations
         self.audio_md5 = hashlib.md5(audio).hexdigest()
         self.tja_md5   = hashlib.md5(tja.encode(self.tja)).hexdigest()
