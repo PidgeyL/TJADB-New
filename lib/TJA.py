@@ -61,16 +61,17 @@ def parse(tja_text):
     return meta
 
 
-def set_meta(tja_text, wave=None, movie=None, image=None):
+def set_meta(tja_text):
     new_tja = ""
     for line in tja_text.splitlines():
         lline = line.lower()
-        if   wave and lline.startswith('wave'):
-            line = line.split(':')[0] + ':' + wave
-        elif movie and lline.startswith('bgmovie'):
-            line = line.split(':')[0] + ':' + movie
-        elif image and lline.startswith('bgimage'):
-            line = line.split(':')[0] + ':' + image
+        if   lline.startswith('wave:'):
+            line = line.split(':')[0] + ':audio.ogg'
+        elif lline.startswith('bgmovie:'):
+            ext  = line.split(':')[1].split('.')[1]
+            line = line.split(':')[0] + ':video.' + ext
+        elif lline.startswith('bgimage:'):
+            line = line.split(':')[0] + ':background.png'
         new_tja = new_tja + line + '\r\n'
     return new_tja
 

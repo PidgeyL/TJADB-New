@@ -1,21 +1,23 @@
 import hashlib
-import io
 import os
 import sys
-
-import pydub
 
 from django.db                  import models
 from django.contrib.auth.models import User
 from django.core.files.base     import File
 from django.core.validators     import MinValueValidator, MaxValueValidator
 from django.utils               import timezone
+from uuid                       import uuid4
 
 run_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(run_path, ".."))
 
 import lib.TJA as tja
+from api.storage   import OverwriteStorage
 from tjadb.config  import Config
+from lib.functions import get_song_preview_path, get_song_audio_path, get_song_video_path,\
+                          get_song_picture_path, get_song_jacket_path, make_preview,\
+                          convert_to_png, convert_to_ogg
 from lib.templates import DOWNLOAD_STRING
 
 LANGUAGE_CHOICES = (
@@ -157,6 +159,8 @@ class User(models.Model):
 ####
 # Song
 class Song(models.Model):
+    # UUID for folder structuring
+    uuid                   = models.CharField(null=False,  blank=False, max_length=36, unique=True)
     # Metadata
     title_orig             = models.CharField(null=False,  blank=False, max_length=127)
     title_en               = models.CharField(null=False,  blank=False, max_length=127)
@@ -171,12 +175,12 @@ class Song(models.Model):
     downloads              = models.PositiveIntegerField(null=False,     blank=False, default=0)
     # Download files
     tja                    = models.TextField(null=False,  blank=False, unique=True)
-    audio                  = models.FileField(null=False,  blank=False, upload_to=Config.song_audio)
-    video                  = models.FileField(null=True,   blank=True,  upload_to=Config.song_video)
-    picture                = models.ImageField(null=True,  blank=True,  upload_to=Config.song_picture)
+    audio                  = models.FileField(null=False,  blank=False, upload_to=get_song_audio_path,   storage=OverwriteStorage())
+    video                  = models.FileField(null=True,   blank=True,  upload_to=get_song_video_path,   storage=OverwriteStorage())
+    picture                = models.ImageField(null=True,  blank=True,  upload_to=get_song_picture_path, storage=OverwriteStorage())
     # Website files
-    preview_image          = models.ImageField(null=True,  blank=True,  upload_to=Config.song_preview_picture)
-    preview_audio          = models.FileField(null=False,  blank=False, upload_to=Config.song_preview_audio)
+    preview_image          = models.ImageField(null=True,  blank=True,  upload_to=get_song_jacket_path,  storage=OverwriteStorage())
+    preview_audio          = models.FileField(null=False,  blank=False, upload_to=get_song_preview_path, storage=OverwriteStorage())
     # Difficulties
     difficulty_easy        = models.PositiveSmallIntegerField(null=True, blank=True, validators=[MaxValueValidator(10)])
     difficulty_normal      = models.PositiveSmallIntegerField(null=True, blank=True, validators=[MaxValueValidator(10)])
@@ -211,16 +215,27 @@ class Song(models.Model):
 
     # Auto-update fields on save
     def save(self, *args, **kwargs):
-        # Audio Preview
+        # UUID
+        if not self.uuid:
+            self.uuid = str(uuid4())
+        ## Fix TJA
+        self.tja = tja.set_meta(self.tja)
+        # Make Audio Preview
         start, end = tja.song_preview(self.tja)
         audio   = self.audio.read()
-        preview = pydub.AudioSegment.from_file(io.BytesIO(audio))[start*1000:end*1000]
-        buffer = io.BytesIO()
-        preview.export(buffer, format="mp3")
-        buffer.seek(0)
-        self.preview_audio = File(buffer, name="preview.mp3")
+        preview = make_preview(audio, start, end)
+        self.preview_audio = File(preview, name="preview.mp3")
+        # Convert / make sure audio is ogg
+        audio = convert_to_ogg(audio)
+        self.audio = File(audio, name="audio.ogg")
+        # Image convert
+        if self.picture:
+            self.picture = File(convert_to_png(self.picture.read()), name="background.png")
+        if self.preview_image:
+            self.preview_image = File(convert_to_png(self.preview_image.read()), name="jacket.png")
         # MD5 calculations
-        self.audio_md5 = hashlib.md5(audio).hexdigest()
+        audio.seek(0)
+        self.audio_md5 = hashlib.md5(audio.getvalue()).hexdigest()
         self.tja_md5   = hashlib.md5(tja.encode(self.tja)).hexdigest()
         if self.video:
             self.video_md5 = hashlib.md5(self.video.read()).hexdigest()

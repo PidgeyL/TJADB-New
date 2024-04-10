@@ -7,6 +7,7 @@ class Config():
     cfgp = configparser.ConfigParser()
     cfgp.read( os.path.join(runpath, "../etc/configuration.ini") )
     default = {'paths':  {'media_root':           '/tmp',
+                          'songs': 'songs',
                           'artist_image':         'artists',
                           'profile_picture':      'profile_pictures',
                           'song_picture':         'songs/pictures',
@@ -55,6 +56,11 @@ class Config():
     @property
     def profile_picture(cls):
         return cls.read_setting("paths", "profile_picture")
+
+    @classmethod
+    @property
+    def songs_path(cls):
+        return cls.read_setting("paths", "songs")
 
     @classmethod
     @property
