@@ -174,7 +174,7 @@ class Song(models.Model):
     artists                = models.ManyToManyField(Artist)
     downloads              = models.PositiveIntegerField(null=False,     blank=False, default=0)
     # Download files
-    tja                    = models.TextField(null=False,  blank=False, unique=True)
+    tja                    = models.TextField(null=False,  blank=False, unique=False)
     audio                  = models.FileField(null=False,  blank=False, upload_to=get_song_audio_path,   storage=OverwriteStorage())
     video                  = models.FileField(null=True,   blank=True,  upload_to=get_song_video_path,   storage=OverwriteStorage())
     picture                = models.ImageField(null=True,  blank=True,  upload_to=get_song_picture_path, storage=OverwriteStorage())
@@ -314,11 +314,6 @@ class Song(models.Model):
             models.Index(fields=["title_en"]),
             models.Index(fields=["genre"]),
             models.Index(fields=["source"]),
-            models.Index(fields=["downloads"]),
-            models.Index(fields=["visible"]),
-            models.Index(fields=["in_progress"]),
-            models.Index(fields=["help_requested"]),
-            models.Index(fields=["review_requested"])
         ]
 
 
