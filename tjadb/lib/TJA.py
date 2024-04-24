@@ -65,12 +65,12 @@ def set_meta(tja_text):
     new_tja = ""
     for line in tja_text.splitlines():
         lline = line.lower()
-        if   lline.startswith('wave:'):
+        if   lline.startswith('wave:') and len(lline.strip()) > 5:
             line = line.split(':')[0] + ':audio.ogg'
-        elif lline.startswith('bgmovie:'):
+        elif lline.startswith('bgmovie:') and len(lline.strip()) > 8:
             ext  = line.split(':')[1].split('.')[1]
             line = line.split(':')[0] + ':video.' + ext
-        elif lline.startswith('bgimage:'):
+        elif lline.startswith('bgimage:') and len(lline.strip()) > 8:
             line = line.split(':')[0] + ':background.png'
         new_tja = new_tja + line + '\r\n'
     return new_tja

@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./tjadb/:/usr/src/app/
+      - ./data/files/:/usr/src/app/media
+      - ./admin-creator.py:/usr/src/entrypoint/admin-creator.py
+      - ./docker-entrypoint.sh:/usr/src/entrypoint/docker-entrypoint.sh
+    ports:
+      - 8001:8000
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+
+  db:
+    image: postgres:alpine3.18
+    volumes:
+      - ./data/db/:/var/lib/postgresql/data/
+    env_file:
+      - ./.env

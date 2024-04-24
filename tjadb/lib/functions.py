@@ -25,7 +25,8 @@ def get_song_audio_path(song, *args):
     return os.path.join(Config.songs_path, song.uuid, "audio.ogg")
 
 def get_song_video_path(song, *args):
-    return os.path.join(Config.songs_path, song.uuid, "video.mp4")
+    ext = args[0].split(".")[1]
+    return os.path.join(Config.songs_path, song.uuid, f"video.{ext}")
 
 def get_song_picture_path(song, *args):
     return os.path.join(Config.songs_path, song.uuid, "background.png")
